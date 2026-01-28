@@ -1,0 +1,32 @@
+[
+  {
+    "url": "https://www.bbc.com/news",
+    "category": "Ad-Hell News Site",
+    "challenge": "Aggressive ads, newsletter popups, sticky navbars"
+  },
+  {
+    "url": "https://www.allrecipes.com/recipe/10813/best-chocolate-chip-cookies/",
+    "category": "Endless Story Recipe Blog",
+    "challenge": "2000 words of fluff before ingredients, recipe card formatting"
+  },
+  {
+    "url": "https://en.wikipedia.org/wiki/Help:Displaying_a_formula",
+    "category": "Heavy Math Wiki",
+    "challenge": "LaTeX formulas and complex tables"
+  },
+  {
+    "url": "https://ghost.org/tutorials/code-snippets-in-ghost/",
+    "category": "Deep Code Technical Blog",
+    "challenge": "Complex CSS syntax highlighting, code block formatting"
+  },
+  {
+    "url": "https://dev.to/",
+    "category": "Dev Community Platform",
+    "challenge": "Bot detection and rich content extraction"
+  },
+  {
+    "url": "https://www.wikipedia.org/wiki/Table_(database)",
+    "category": "Complex Tables",
+    "challenge": "Multi-line content and complex HTML tables"
+  }
+]
