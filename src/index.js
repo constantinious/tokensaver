@@ -71,6 +71,15 @@ app.get('/parse', limiter, async (req, res) => {
 
   try {
     const result = await convertToMarkdown(url);
+    
+    // Ensure markdown was actually extracted
+    if (!result.markdown || result.markdown.trim().length === 0) {
+      return res.status(500).json({
+        error: 'Failed to extract content',
+        details: 'Could not find main content on this page. It might be behind a paywall, blocked, or have unusual formatting.'
+      });
+    }
+    
     res.json(result);
   } catch (error) {
     console.error('Parse error:', error.message);

@@ -395,10 +395,21 @@
 
             try {
                 const response = await fetch(`/parse?url=${encodeURIComponent(url)}`);
-                const data = await response.json();
+                
+                // Try to parse JSON response
+                let data;
+                try {
+                    data = await response.json();
+                } catch (parseError) {
+                    throw new Error('Invalid response from server - please try again');
+                }
 
                 if (!response.ok) {
                     throw new Error(data.error || 'Failed to parse URL');
+                }
+
+                if (!data.markdown) {
+                    throw new Error('No content extracted - the page might be blocked or unavailable');
                 }
 
                 currentMarkdown = data.markdown;
