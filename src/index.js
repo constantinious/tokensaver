@@ -18,12 +18,12 @@ const limiter = rateLimit({
   legacyHeaders: false, // Disable the `X-RateLimit-*` headers
 });
 
-/**
- * GET /parse - Converts a URL to clean Markdown
- * Query Parameters:
- *   - url (required): The URL to fetch and convert
- */
-app.get('/parse', limiter, async (req, res) => {', publicPath);
+// Middleware
+app.use(express.json());
+
+// Serve static files from public directory
+const publicPath = path.join(__dirname, '../public');
+console.log('Serving static files from:', publicPath);
 app.use(express.static(publicPath));
 
 // Explicitly serve index.html at root
@@ -36,7 +36,7 @@ app.get('/', (req, res) => {
  * Query Parameters:
  *   - url (required): The URL to fetch and convert
  */
-app.get('/parse', async (req, res) => {
+app.get('/parse', limiter, async (req, res) => {
   const { url } = req.query;
 
   // Validate URL parameter
