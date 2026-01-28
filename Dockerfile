@@ -11,6 +11,7 @@ RUN npm ci --only=production
 
 # Copy application code
 COPY src ./src
+COPY public ./public
 
 # Expose port 3000
 EXPOSE 3000
