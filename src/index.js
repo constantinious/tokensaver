@@ -6,7 +6,7 @@ const { convertToMarkdown } = require('./parser');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Rate limiting configuration
+// Rate limiting configuration - use stricter per-IP detection for Render
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
   max: 20, // Limit each IP to 20 requests per windowMs
@@ -14,11 +14,25 @@ const limiter = rateLimit({
     error: 'Too many requests from this IP, please try again after 15 minutes',
     retryAfter: '15 minutes'
   },
-  standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
-  legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+  standardHeaders: true,
+  legacyHeaders: false,
+  // Trust proxy to get real client IP
+  skip: (req, res) => {
+    // Don't rate limit health checks
+    return req.path === '/health';
+  },
+  keyGenerator: (req, res) => {
+    // For Render, use X-Forwarded-For. For local, use remoteAddress
+    const forwardedFor = req.headers['x-forwarded-for'];
+    if (forwardedFor) {
+      return forwardedFor.split(',')[0].trim();
+    }
+    return req.ip;
+  }
 });
 
-// Middleware
+// Middleware - apply trust proxy setting for accurate IP detection
+app.set('trust proxy', 1); // Trust first proxy (Render)
 app.use(express.json());
 
 // Serve static files from public directory
