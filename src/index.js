@@ -1,16 +1,29 @@
 const express = require('express');
 const path = require('path');
+const rateLimit = require('express-rate-limit');
 const { convertToMarkdown } = require('./parser');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Middleware
-app.use(express.json());
+// Rate limiting configuration
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 20, // Limit each IP to 20 requests per windowMs
+  message: {
+    error: 'Too many requests from this IP, please try again after 15 minutes',
+    retryAfter: '15 minutes'
+  },
+  standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+  legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+});
 
-// Serve static files from public directory
-const publicPath = path.join(__dirname, '../public');
-console.log('Serving static files from:', publicPath);
+/**
+ * GET /parse - Converts a URL to clean Markdown
+ * Query Parameters:
+ *   - url (required): The URL to fetch and convert
+ */
+app.get('/parse', limiter, async (req, res) => {', publicPath);
 app.use(express.static(publicPath));
 
 // Explicitly serve index.html at root
